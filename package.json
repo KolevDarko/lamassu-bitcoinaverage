@@ -1,24 +1,23 @@
 {
-  "name": "lamassu-coindesk",
+  "name": "lamassu-bitcoinaverage",
   "version": "0.0.1",
-  "description": "Lamassu ticker for CoinDesk Bitcoin Price Index",
+  "description": "Lamassu ticker for BitcoinAverage price index",
   "main": "lib/index.js",
   "scripts": {
     "test": "tap ./test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lamassu/lamassu-coindesk.git"
+    "url": "https://github.com/lamassu/lamassu-bitcoinaverage.git"
   },
   "keywords": [
     "Lamassu",
-    "Bitpay",
     "Bitcoin"
   ],
   "author": "Lamassu (https://lamassu.is)",
   "license": "unlicense",
   "bugs": {
-    "url": "https://github.com/lamassu/lamassu-coindesk/issues"
+    "url": "https://github.com/lamassu/lamassu-bitcoinaverage/issues"
   },
   "dependencies": {
     "async": "~0.8.0",
