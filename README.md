@@ -1,4 +1,4 @@
-lamassu-coindesk
-================
+lamassu-bitcoinaverage
+======================
 
-Coindesk module containing ticker functionality for Lamassu Bitcoin Machine. 
+lamassu-server module containing ticker functionality for BitcoinAverage. 
