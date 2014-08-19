@@ -1,10 +1,8 @@
 'use strict';
 
-var _       = require('lodash');
+var _ = require('lodash');
 
-var config  = require('./config');
-
-_.merge(exports, config, true);
+_.merge(exports, require('./config'), true);
 
 
 // Ticker merhods:
@@ -12,7 +10,7 @@ exports.ticker = require('./lib/ticker').ticker;
 
 
 // // Common methods:
-// exports.balance = require('./lib/balance').balance;
+// exports.balance = require('./lib/common').balance;
 
 
 // // Trader methods:
