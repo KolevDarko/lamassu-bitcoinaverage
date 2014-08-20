@@ -73,7 +73,7 @@ exports.ticker = function ticker(currencies, callback) {
     return function(cb) {
       Wreck.get(url, {json: true}, function(err, res, payload) {
         if (res.statusCode === 404)
-          return cb(new Error('Unsupported currency'))
+          return cb(new Error('Unsupported currency'));
 
         cb(err, payload);
       });
