@@ -1,13 +1,18 @@
 'use strict';
 
-var Wreck       = require('wreck');
-var async       = require('async');
+var _       = require('lodash');
+var Wreck   = require('wreck');
+var async   = require('async');
 
 
-// copy relevant convienient constants
-var config                = require('../config');
-var API_ENDPOINT          = config.API_ENDPOINT;
-var SUPPORTED_CURRENCIES  = config.SUPPORTED_CURRENCIES;
+exports.NAME = 'Bitcoinaverage';
+exports.SUPPORTED_MODULES = ['ticker'];
+var API_ENDPOINT = 'https://api.bitcoinaverage.com/';
+
+
+exports.config = function config(config) {
+  if (config) _.merge(exports, config);
+};
 
 
 function getTickerUrls(currencies) {
@@ -26,6 +31,9 @@ function formatResponse(currencies, results, callback) {
   var out = {};
 
   function addCurrency(currency, result) {
+    if (typeof result === 'undefined')
+      return;
+
     out[currency] = {
       currency: currency,
       rates: {
@@ -43,6 +51,10 @@ function formatResponse(currencies, results, callback) {
       addCurrency(currency, results[currency]);
     });
 
+  if (currencies.length !== Object.keys(out).length)
+    return callback(new Error('Unsupported currency'));
+
+
   callback(null, out);
 };
 
@@ -51,21 +63,18 @@ exports.ticker = function ticker(currencies, callback) {
   if (typeof currencies === 'string')
     currencies = [currencies];
 
-  currencies.sort();
-
   if(currencies.length === 0)
     return callback(new Error('Currency not specified'));
-
-  for (var i=0; i<currencies.length; i++)
-    if (SUPPORTED_CURRENCIES.indexOf(currencies[i]) === -1)
-      return callback(new Error('Unsupported currency: ' + currencies[i]));
 
   var urls = getTickerUrls(currencies);
 
   // change each url on the list into a download job
   var downloadList = urls.map(function(url) {
     return function(cb) {
-      Wreck.get(url, { json:true }, function(err, res, payload) {
+      Wreck.get(url, {json: true}, function(err, res, payload) {
+        if (res.statusCode === 404)
+          return cb(new Error('Unsupported currency'))
+
         cb(err, payload);
       });
     }
