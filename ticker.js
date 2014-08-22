@@ -8,11 +8,11 @@ var async   = require('async');
 exports.NAME = 'Bitcoinaverage';
 exports.SUPPORTED_MODULES = ['ticker'];
 var API_ENDPOINT = 'https://api.bitcoinaverage.com/';
-var config = {};
+var pluginConfig = {};
 
 
 exports.config = function config(localConfig) {
-  if (localConfig) _.merge(config, localConfig);
+  if (localConfig) _.merge(pluginConfig, localConfig);
 };
 
 
@@ -23,7 +23,7 @@ function getTickerUrls(currencies) {
   ];
 
   return urls;
-};
+}
 
 function formatResponse(currencies, results, callback) {
 
@@ -57,7 +57,7 @@ function formatResponse(currencies, results, callback) {
 
 
   callback(null, out);
-};
+}
 
 
 exports.ticker = function ticker(currencies, callback) {
@@ -78,7 +78,7 @@ exports.ticker = function ticker(currencies, callback) {
 
         cb(err, payload);
       });
-    }
+    };
   });
 
   async.parallel(downloadList, function(err, results) {

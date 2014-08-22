@@ -1,3 +1,5 @@
+/* global describe, it */
+
 'use strict';
 
 var should = require('chai').should();
@@ -17,7 +19,7 @@ function checkCurrency(results, currency) {
 
   curr.should.have.property('rates');
 
-  var rates = curr['rates'];
+  var rates = curr.rates;
   rates.should.be.an('object');
 
   rates.should.have.property('ask');
@@ -31,7 +33,7 @@ function checkCurrency(results, currency) {
   askRate.should.be.at.least(bidRate);
 
   return rates;
-};
+}
 
 
 var tickerPlugin = require('../ticker');
@@ -48,7 +50,7 @@ describe(tickerPlugin.NAME + ' Ticker', function() {
   // single supported currency fetch (as string)
   it('should read ticker in \'' + testedCurrencies[0] + '\'', function(done) {
     tickerPlugin.ticker(testedCurrencies[0], function(err, results) {
-      should.not.exist(err, "There should be no error");
+      should.not.exist(err, 'There should be no error');
       should.exist(results);
 
       checkCurrency(results, testedCurrencies[0]);
@@ -65,7 +67,7 @@ describe(tickerPlugin.NAME + ' Ticker', function() {
   // single supported currency fetch (as array)
   it('should read ticker in [' + tmpCurrency + ']', function(done) {
     tickerPlugin.ticker([tmpCurrency], function(err, results) {
-      should.not.exist(err, "There should be no error");
+      should.not.exist(err, 'There should be no error');
       should.exist(results);
 
       checkCurrency(results, tmpCurrency);
@@ -95,7 +97,7 @@ describe(tickerPlugin.NAME + ' Ticker', function() {
     it('should read ticker in ' + testedCurrencies.join(', '), function(done) {
 
       tickerPlugin.ticker(testedCurrencies, function(err, results) {
-        should.not.exist(err, "There should be no error");
+        should.not.exist(err, 'There should be no error');
         should.exist(results);
 
         for(var i in testedCurrencies)
