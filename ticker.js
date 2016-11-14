@@ -75,14 +75,17 @@ function formatResponse(currencies, results, callback) {
 }
 
 function authHeader(){
-  if(!(API_KEY && API_SECRET)){
-    return {};
+  var headers = {
+    'referrer': 'lamassu'
+  };
+  if(API_KEY && API_SECRET) {
+    var timestamp = Math.floor(Date.now() / 1000);
+    var payload = timestamp + '.' + API_KEY;
+    var hash = crypto.HmacSHA256(payload, API_SECRET);
+    var hex_hash = crypto.enc.Hex.stringify(hash);
+    headers['X-Signature'] = payload + '.' + hex_hash;
   }
-  var timestamp = Math.floor(Date.now() / 1000);
-  var payload = timestamp + '.' + API_KEY;
-  var hash = crypto.HmacSHA256(payload, API_SECRET);
-  var hex_hash = crypto.enc.Hex.stringify(hash);
-  return {'X-Signature': payload + '.' + hex_hash};
+  return headers;
 }
 
 exports.ticker = function ticker(currencies, callback) {
