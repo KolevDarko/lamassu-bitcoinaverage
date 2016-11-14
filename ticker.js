@@ -15,11 +15,14 @@ exports.config = function config(localConfig) {
   if (localConfig) _.merge(pluginConfig, localConfig);
 };
 
+function btcCurrency(currency) {
+  return 'BTC' + currency;
+}
 
 function getTickerUrls(currencies) {
-  var suffix = currencies.length === 1 ? currencies[0] + '/' : 'all';
+  var suffix = currencies.length === 1 ? btcCurrency(currencies[0]) : 'all';
   var urls = [
-    API_ENDPOINT + 'ticker/global/' + suffix
+    API_ENDPOINT + 'indices/global/ticker/' + suffix
   ];
 
   return urls;
@@ -49,7 +52,7 @@ function formatResponse(currencies, results, callback) {
 
   else
     currencies.forEach(function(currency) {
-      addCurrency(currency, results[currency]);
+      addCurrency(currency, results[btcCurrency(currency)]);
     });
 
   if (currencies.length !== Object.keys(out).length)
@@ -73,7 +76,7 @@ exports.ticker = function ticker(currencies, callback) {
   var downloadList = urls.map(function(url) {
     return function(cb) {
       Wreck.get(url, {json: true}, function(err, res, payload) {
-        if (res.statusCode === 404)
+        if (res.statusCode === 400)
           return cb(new Error('Unsupported currency'));
 
         cb(err, payload);

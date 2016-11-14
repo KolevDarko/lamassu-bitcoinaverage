@@ -45,7 +45,7 @@ describe(tickerPlugin.NAME + ' Ticker', function() {
   // });
 
   // NOTE: MAX timeout for each test
-  this.timeout(2000);
+  this.timeout(4000);
 
   // single supported currency fetch (as string)
   it('should read ticker in \'' + testedCurrencies[0] + '\'', function(done) {
