@@ -9,6 +9,9 @@ exports.NAME = 'Bitcoinaverage';
 exports.SUPPORTED_MODULES = ['ticker'];
 var API_ENDPOINT = 'https://api.bitcoinaverage.com/';
 var APIV2_ENDPOINT = 'https://apiv2.bitcoinaverage.com/';
+//Generate your own api key and api secret for free from https://bitcoinaverage.com/en/apikeys
+//You can leave API_KEY and API_SECRET empty in which case the v1 api(api.bitcoinaverage.com) will be used.
+//However the v1 api will be closed soon. Check for updates on https://bitcoinaverage.com/blog.
 var API_KEY = '';
 var API_SECRET = '';
 var pluginConfig = {};
