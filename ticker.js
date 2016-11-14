@@ -3,11 +3,14 @@
 var _       = require('lodash');
 var Wreck   = require('wreck');
 var async   = require('async');
-
+var crypto  = require('crypto-js');
 
 exports.NAME = 'Bitcoinaverage';
 exports.SUPPORTED_MODULES = ['ticker'];
 var API_ENDPOINT = 'https://api.bitcoinaverage.com/';
+var APIV2_ENDPOINT = 'https://apiv2.bitcoinaverage.com/';
+var API_KEY = '';
+var API_SECRET = '';
 var pluginConfig = {};
 
 
@@ -21,8 +24,14 @@ function btcCurrency(currency) {
 
 function getTickerUrls(currencies) {
   var suffix = currencies.length === 1 ? btcCurrency(currencies[0]) : 'all';
+  var root_api_url = '';
+  if(!(API_KEY && API_SECRET)) {
+    root_api_url = API_ENDPOINT;
+  }else{
+    root_api_url = APIV2_ENDPOINT;
+  }
   var urls = [
-    API_ENDPOINT + 'indices/global/ticker/' + suffix
+    root_api_url + 'indices/global/ticker/' + suffix
   ];
 
   return urls;
@@ -62,6 +71,16 @@ function formatResponse(currencies, results, callback) {
   callback(null, out);
 }
 
+function authHeader(){
+  if(!(API_KEY && API_SECRET)){
+    return {};
+  }
+  var timestamp = Math.floor(Date.now() / 1000);
+  var payload = timestamp + '.' + API_KEY;
+  var hash = crypto.HmacSHA256(payload, API_SECRET);
+  var hex_hash = crypto.enc.Hex.stringify(hash);
+  return {'X-Signature': payload + '.' + hex_hash};
+}
 
 exports.ticker = function ticker(currencies, callback) {
   if (typeof currencies === 'string')
@@ -75,7 +94,7 @@ exports.ticker = function ticker(currencies, callback) {
   // change each url on the list into a download job
   var downloadList = urls.map(function(url) {
     return function(cb) {
-      Wreck.get(url, {json: true}, function(err, res, payload) {
+      Wreck.get(url, {json: true, headers: authHeader()}, function(err, res, payload) {
         if (res.statusCode === 400)
           return cb(new Error('Unsupported currency'));
 
