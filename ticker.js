@@ -7,13 +7,10 @@ var crypto  = require('crypto-js');
 
 exports.NAME = 'Bitcoinaverage';
 exports.SUPPORTED_MODULES = ['ticker'];
-var API_ENDPOINT = 'https://api.bitcoinaverage.com/';
 var APIV2_ENDPOINT = 'https://apiv2.bitcoinaverage.com/';
 //Generate your own api key and api secret for free from https://bitcoinaverage.com/en/apikeys
-//You can leave API_KEY and API_SECRET empty in which case the v1 api(api.bitcoinaverage.com) will be used.
-//However the v1 api will be closed soon. Check for updates on https://bitcoinaverage.com/blog.
-var API_KEY = '';
-var API_SECRET = '';
+var API_KEY = 'ZGUyZTQ3NTJiNDQ5NDkzM2I4YTRjNjE2YTY1Y2Y0ZjE';
+var API_SECRET = 'NDg4OGFlNzVlYWUzNGUwM2E0MzRjNTE4NDkwOTEwZThhMmM1NTU1YmEzNjg0Yjc5YmU5Y2EzZWZlYjZlYzg5YQ';
 var pluginConfig = {};
 
 
@@ -27,14 +24,8 @@ function btcCurrency(currency) {
 
 function getTickerUrls(currencies) {
   var suffix = currencies.length === 1 ? btcCurrency(currencies[0]) : 'all';
-  var root_api_url = '';
-  if(!(API_KEY && API_SECRET)) {
-    root_api_url = API_ENDPOINT;
-  }else{
-    root_api_url = APIV2_ENDPOINT;
-  }
   var urls = [
-    root_api_url + 'indices/global/ticker/' + suffix
+    APIV2_ENDPOINT + 'indices/global/ticker/' + suffix
   ];
 
   return urls;
